@@ -1,0 +1,34 @@
+CREATE TABLE userronin (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ login varchar(30),
+ pass varchar(32),
+ mail varchar(80),
+ last_ip varchar(15),
+ owner varchar(12),
+ created_at TIMESTAMP,
+ updated_at TIMESTAMP
+);
+
+CREATE TABLE cmdtemplate (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ name varchar(64),
+ date varchar(30),
+ command TEXT
+);
+
+CREATE TABLE tasktool (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ pid INTEGER,
+ status varchar(16),
+ name varchar(16),
+ date varchar(30),
+ host varchar(256),
+ logfile varchar(64),
+ port INTEGER(6),
+ command TEXT,
+ result TEXT
+);
+
+
+INSERT INTO "userronin" (login,pass,owner) VALUES ('admin', '$2a$12$YoZTUHs9/SFD9OzvAWPUbePYLHDBcC3egmanr9h5pJO0UgvUwTWcq', 'admin');
+

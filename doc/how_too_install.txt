@@ -1,0 +1,35 @@
+
+About NOZES
+====================================
+
+  Pentest CMD manager
+
+To install:
+Need:
+httpd server with TLS/SSL
+SQLite3 + php5 and php5-sqlite (PDO driver of sqlite)
+
+1-step
+$ cp -rf /nozes /var/www/html
+$ chmod 755 -R /var/www/html/nozes
+$ chmod o+w /var/www/html/nozes/db/ronin.db
+$ setenforce 0   (at fedora) or chmod 755 at db/ronin.db
+
+2-step
+Go to: 	
+	http://localhost/nozes/view/login.php
+Put it: 
+	login: admin
+	password: 1234
+Change your password at user manager menu...
+
+3-steps
+Before start tasks, up the Executor.php in background
+$ php /var/www/html/nozes/scripts/Executor &
+
+
+
+
+
+
+

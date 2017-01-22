@@ -1,4 +1,5 @@
-# nozes
+# nozes - alpha version
+
 Nozes is a Pentest cmd manager.
 You can automatize your attacks in one click and get results...
 

@@ -13,6 +13,7 @@ I test at nginx + php + fastcgi..
 
 
 1-step
+$ git clone https://github.com/CoolerVoid/nozes
 $ cp -rf /nozes /var/www/html
 $ chmod 755 -R /var/www/html/nozes
 $ chmod o+w /var/www/html/nozes/db/ronin.db

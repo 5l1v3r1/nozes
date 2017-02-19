@@ -16,8 +16,16 @@ I test at nginx + php + fastcgi..
 $ git clone https://github.com/CoolerVoid/nozes
 $ cp -rf /nozes /var/www/html
 $ chmod 755 -R /var/www/html/nozes
+*in fedora linux with nginx
 $ chmod o+w /var/www/html/nozes/db/ronin.db
 $ setenforce 0   (at fedora) or chmod 755 at db/ronin.db
+*in ubuntu linux with apache2
+$ chgrp www-data db
+$ chgrp www-data db/ronin.db 
+$ chmod g+w db/
+$ chmod g+w db/ronin.db 
+$ systemctl restart apache2
+
 
 2-step
 Go to: 	

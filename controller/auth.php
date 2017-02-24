@@ -1,6 +1,7 @@
 <?php
 
-require "boot.php";
+include "boot.php";
+
 
 switch ($url) {
     case "auth":
@@ -19,23 +20,43 @@ switch ($url) {
       test_csrf();	
       $user=sanitize($_POST['user']);
       $pass=sanitize($_POST['pass']);
-      $secret=$frase.$pass;
+      $secret=$pass;
       $_SESSION['userronin']=$user; 
-      $gen=new Bcrypt(12);
-      $bcrypt_hash=$gen->hash($secret); 
+
+      $bcrypt_hash=password_hash($secret, PASSWORD_BCRYPT); 
       $pdo2 = new crud(); 
       $pdo2->conn();
       $stmt = $pdo2->db->prepare("select * FROM userronin WHERE login = ?  ");
       $stmt->bindValue(1, $user, PDO::PARAM_STR);  
       $stmt->execute();  
-      $res=$stmt->fetchAll();
+      $res=$stmt->fetchAll(PDO::FETCH_ASSOC);
       $_SESSION['passronin']=$bcrypt_hash; 
-          if($gen->verify($bcrypt_hash, $res[0]['pass'])=="false") {
+
+	if(count($res)<1) {
+
            print "<img src=\"../view/images/alerta.png\">
-            <h1>ERROR at auth  05</h1> 
+            <h1>ERROR at auth !!</h1> 
             <meta HTTP-EQUIV='refresh' CONTENT='2; URL=../view/login.php'>"; 
            exit;
+	}
+	$var=false;
+
+       foreach($res as $r) {
+	  if(strlen($r['pass'])>50){
+	  
+           if(password_verify($secret,$r['pass'])==true) {
+		$var=true;
+	   }
+
 	  }
+	  
+	}
+	if($var==false){
+            print "<img src=\"../view/images/alerta.png\">
+             <h1>ERROR at auth  05</h1> 
+             <meta HTTP-EQUIV='refresh' CONTENT='2; URL=../view/login.php'>"; 
+            exit;
+	 }
 
          $janela='    		<div class="portlet portlet-closable x4">	
 				<div class="portlet-header">
@@ -47,17 +68,17 @@ switch ($url) {
          $bemvindo="Welcome to Nozes tool</p>";
          $values = array('last_ip'=>sanitize($_SERVER['REMOTE_ADDR']) );
          $crud->Update('userronin', $values, 'id', $r['id']);
-         $page->conteudo=$janela." <br>".$bemvindo."<meta HTTP-EQUIV='refresh' CONTENT='1; URL=auth.php?page=conta'></div></div>";
+         $page->conteudo=$janela." <br>".$bemvindo."<meta HTTP-EQUIV='refresh' CONTENT='10; URL=auth.php?page=conta'></div></div>";
          print $page->display_page();
       
       break;
 
      case "suporte":
       $page->titulo="Suport";
-      $suporte="<font color=orange><pre>
-			  NOZES Pentest CMD MANAGER
-			  Version: 0.1
-			  Contact:  coolerlair@gmail.com
+      $suporte="<font color=cyan><br><pre>
+			  Nozes
+			  Alpha Version
+		
                 </pre>";
       $page->conteudo="<div style=\"background-color:black;\">".$suporte."</div></div>";
       print $page->display_page();
@@ -75,7 +96,7 @@ switch ($url) {
          $values = array(
                   'login:text'=>'loginedit:'.$r['login'], 
 		  'token:hidden'=>'csrf_token:'.$token,
-                  'Password:password'=>'passedit:'.$r['pass'],
+                  'Password:password'=>'passedit:'."1234",
                   'E-mail:text'=>'mailedit:'.$r['mail'],
 		  'id:hidden'=>'idedituser:'.$r['id']                               
                 );
@@ -96,7 +117,7 @@ switch ($url) {
      case "logof":
       $page->titulo="Logof";
       $msg='<p class="message message-error message-closable">Do you want exit ?</p>';
-      $page->conteudo=$msg."Do you want exit ? <br><a href=\"auth.php?page=logofOK\"><b>YES</b></a>";
+      $page->conteudo=$msg."<br><a href=\"auth.php?page=logofOK\"><b>YES</b></a>";
       print $page->display_page();
       break;
 
@@ -135,9 +156,8 @@ switch ($url) {
      $mailadd=htmlentities($_POST['mailadd']); 
      $passadd=htmlentities($_POST['passadd']); if(!$passadd) { print "need a password"; exit; }
      $owneradd=htmlentities($_POST['owneradd']);
-     $secret=$frase.$passadd;
-      $gen=new Bcrypt(12);
-      $bcrypt_hashadd=$gen->hash($secret); 
+     $secret=$passadd;
+     $bcrypt_hashadd=password_hash($secret, PASSWORD_BCRYPT); 
      $values = array(
                  array(
                   'login'=>sanitize($loginadd), 
@@ -206,7 +226,7 @@ switch ($url) {
          	$values = array(
                   'login:text'=>'loginedit:'.$r['login'], 
 		  'token:hidden'=>'csrf_token:'.$token,
-                  'Password:password'=>'passedit:'.$r['pass'],
+                  'Password:password'=>'passedit:'."1234",
                   'E-mail:text'=>'mailedit:'.$r['mail'],
 		  'id:hidden'=>'idedituser:'.$r['id']                               
                 );
@@ -232,9 +252,8 @@ switch ($url) {
         $mailedit=htmlentities(sanitize($_POST['mailedit']));
         $passedit=htmlentities(sanitize($_POST['passedit']));
         $owneredit=htmlentities(sanitize($_POST['owneredit']));
-        $secret=$frase.$passedit;
-        $gen=new Bcrypt(12);
-        $bcrypt_hashedit=$gen->hash($secret); 
+        $secret=$passedit;
+        $bcrypt_hashedit=password_hash($secret, PASSWORD_BCRYPT); 
         $crud->dbUpdate('userronin', 'login', $loginedit, 'id', $idedituser);
         $crud->dbUpdate('userronin', 'pass', $bcrypt_hashedit, 'id', $idedituser);
         $crud->dbUpdate('userronin', 'mail', $mailedit, 'id', $idedituser);

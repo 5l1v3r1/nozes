@@ -20,6 +20,7 @@ $ chmod 755 -R /var/www/html/nozes
 $ chmod o+w /var/www/html/nozes/db/ronin.db
 $ setenforce 0   (at fedora) or chmod 755 at db/ronin.db
 *in ubuntu linux with apache2
+# cd /var/www/html/nozes
 $ chgrp www-data db
 $ chgrp www-data db/ronin.db 
 $ chmod g+w db/

@@ -8,7 +8,7 @@ To install:
 Need:
 * httpd server with TLS/SSL
 * SQLite3 
-* php5 and php5-sqlite and PDO driver of sqlite
+* php5 and php5-sqlite or  php7... and PDO driver of sqlite
 I test at nginx + php + fastcgi..
 
 

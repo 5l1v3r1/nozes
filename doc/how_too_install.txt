@@ -28,6 +28,14 @@ $ chmod g+w db/ronin.db
 $ systemctl restart apache2
 
 
+Configure your nginx or apache, to deny all access to database:
+---
+location ~ /var/www/html/nozes/db {
+   deny all;
+   return 404;
+}
+---
+
 2-step
 Go to: 	
 	http://localhost/nozes/view/login.php
